@@ -27,6 +27,7 @@ func main() {
 	}
 
 	cmds.register("config", handlerConfig)
+	cmds.register("new", handlerNewFile)
 
 	args := os.Args
 	if len(args) < 2 {
