@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -97,16 +98,21 @@ tags:
 
 	savedContent, err := os.ReadFile(finalFile)
 
-	data, err := parseContent(savedContent)
+	data, metaData, err := parseContent(savedContent)
 
 	if err := os.WriteFile(finalFile, data, 0644); err != nil {
 		return nil
 	}
 
+	err = mvFile(finalFile, metaData.URL, s)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func parseContent(content []byte) ([]byte, error) {
+func parseContent(content []byte) ([]byte, MetaData, error) {
 	contentStr := string(content)
 
 	re := regexp.MustCompile(`(?s)^---\n(.*?)\n---\n(.*)`)
@@ -118,7 +124,7 @@ func parseContent(content []byte) ([]byte, error) {
 		err := yaml.Unmarshal([]byte(matches[1]), &metaData)
 		if err != nil {
 			fmt.Println("ERROR: Failed to parse YAML:", err)
-			return []byte{}, err
+			return []byte{}, MetaData{}, err
 		}
 		metaData.Content = matches[2]
 	} else {
@@ -129,9 +135,41 @@ func parseContent(content []byte) ([]byte, error) {
 
 	data, err := yaml.Marshal(metaData)
 	if err != nil {
-		return []byte{}, err
+		return []byte{}, MetaData{}, err
 	}
 
 	formattedContent := fmt.Sprintf("---\n%s---\n%s", data, metaData.Content)
-	return []byte(formattedContent), nil
+	return []byte(formattedContent), metaData, nil
+}
+
+func mvFile(file string, dest string, s *state) error {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+
+	saveLocation := home + s.config.SaveLocation
+
+	sourcePath := filepath.Join(currentDir, file)
+	destDir := filepath.Join(saveLocation, dest)
+	destPath := filepath.Join(destDir, file)
+
+	err = os.MkdirAll(destDir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	err = os.Rename(sourcePath, destPath)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("File moved successfully")
+
+	return nil
 }
