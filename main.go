@@ -12,11 +12,7 @@ type state struct {
 }
 
 func main() {
-	cfg, err := config.Read()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	cfg := config.Read()
 
 	st := &state{
 		config: &cfg,
