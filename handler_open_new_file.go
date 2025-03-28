@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Bones1335/blog-tool/internal/parser"
 	"gopkg.in/yaml.v2"
 )
 
@@ -130,6 +131,8 @@ func parseContent(content []byte) ([]byte, MetaData, error) {
 	} else {
 		metaData.Content = contentStr
 	}
+
+	parser.ParseHeader(matches[1])
 
 	metaData.URL = fmt.Sprintf("/%v", strings.ToLower(strings.Join(strings.Split(metaData.Title, " "), "-")))
 
