@@ -16,7 +16,7 @@ func Read() Config {
 	config := Config{
 		Editor:  "nvim",
 		Journal: fmt.Sprintf("/Documents/journal/%v", currentYear.Year()),
-		Blog:    fmt.Sprintf("/programs/read-the-bones/content/posts/%v", currentYear.Year()),
+		Blog:    fmt.Sprintf("/Documents/blog/%v", currentYear.Year()),
 	}
 
 	return config
