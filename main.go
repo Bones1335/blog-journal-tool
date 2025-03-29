@@ -22,7 +22,6 @@ func main() {
 		handlers: make(map[string]func(*state, command) error),
 	}
 
-	cmds.register("config", handlerConfig)
 	cmds.register("new", handlerNewFile)
 
 	args := os.Args
