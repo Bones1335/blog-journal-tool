@@ -1,4 +1,4 @@
-module github.com/Bones1335/blog-tool
+module github.com/Bones1335/blog-journal-tool
 
 go 1.24.1
 

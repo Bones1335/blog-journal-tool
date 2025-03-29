@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Bones1335/blog-tool/internal/config"
+	"github.com/Bones1335/blog-journal-tool/internal/config"
 )
 
 type state struct {
