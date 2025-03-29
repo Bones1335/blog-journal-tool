@@ -105,7 +105,7 @@ tags:
 		return nil
 	}
 
-	err = mvFile(finalFile, metaData.URL, s)
+	err = mvFile(finalFile, metaData.URL, s, cmd)
 	if err != nil {
 		return err
 	}
@@ -145,7 +145,7 @@ func parseContent(content []byte) ([]byte, MetaData, error) {
 	return []byte(formattedContent), metaData, nil
 }
 
-func mvFile(file string, dest string, s *state) error {
+func mvFile(file string, dest string, s *state, cmd command) error {
 	currentDir, err := os.Getwd()
 	if err != nil {
 		return err
@@ -156,7 +156,14 @@ func mvFile(file string, dest string, s *state) error {
 		return err
 	}
 
-	saveLocation := home + s.config.SaveLocation
+	var saveLocation string
+	if cmd.Args[0] == "blog" {
+		saveLocation = home + s.config.Blog
+	} else if cmd.Args[0] == "journal" {
+		saveLocation = home + s.config.Journal
+	} else {
+		return fmt.Errorf("error reading save location from command line input")
+	}
 
 	sourcePath := filepath.Join(currentDir, file)
 	destDir := filepath.Join(saveLocation, dest)
