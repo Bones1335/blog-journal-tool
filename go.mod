@@ -1,4 +1,4 @@
-module github.com/Bones1335/blog-journal-tool
+module github.com/Bones1335/victor
 
 go 1.24.1
 
