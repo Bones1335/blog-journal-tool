@@ -1,6 +1,8 @@
-# Blog Journal Tool
+# Victor
 
 Open a blank Markdown File in your editor of choice from the command line that uses a template and saves to the desired location noted in the config file.
+
+_Inspired by_ [Hugo](https://gohugo.io/) _to make wanting to write frictionless._
 
 # How to Install
 
